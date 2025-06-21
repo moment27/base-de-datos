@@ -34,12 +34,12 @@ class L_Usuario:
             print(f"Error al contar usuarios {error}")
             return 0 
     
-    def Crear_Usuario(self,usuario,password):
+    def Crear_Usuario(self,usuario,password,categoria):
         try:
             con = Conexion().ConexionBD()
             cursor = con.cursor()
-            sql = "INSERT INTO categoria (nombre,password) VALUES (%s,%s);"
-            cursor.execute(sql, (usuario,password))
+            sql = "INSERT INTO usuario (nombre,password,categoria) VALUES (%s,%s,%s);"
+            cursor.execute(sql, (usuario,password,categoria))
             con.commit()
             cursor.close()
             con.close()

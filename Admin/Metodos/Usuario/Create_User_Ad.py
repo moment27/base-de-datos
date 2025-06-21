@@ -22,10 +22,11 @@ def Crear_Usuario_C():
     global user_text,password_text
     nombre_user = user_text.get()
     password = password_text.get()
+    categoria= user_cat.get()
     if nombre_user == "" or password =="":
         print("El campo está vacío")
         return
-    resultado = L_Usuario().Crear_Usuario(nombre_user,password)
+    resultado = L_Usuario().Crear_Usuario(nombre_user,password,categoria)
     if resultado:
         print("Usuario creada exitosamente")
         Limpiar_USER()

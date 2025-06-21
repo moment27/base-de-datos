@@ -191,16 +191,18 @@ style.configure("Treeview.Heading",background="#2b2b2b",foreground="white",font=
 
 
 #Inserto el encabezado/columna
-tree=ttk.Treeview(ventana_admin,columns=("Id","Nombre","Password"),show='headings',height=5)
+tree=ttk.Treeview(ventana_admin,columns=("Id","Nombre","Password","Categoria"),show='headings',height=5)
 tree.pack(padx=20,pady=90,fill="both",expand=False)
 tree.column("Id",anchor="center",width=50)
 tree.column("Nombre",anchor="center",width=50)
 tree.column("Password",anchor="center",width=50)
+tree.column("Categoria",anchor="center",width=50)
 
 
 tree.heading("Id",text="ID")
 tree.heading("Nombre",text="Nombre")
 tree.heading("Password",text="Password")
+tree.heading("Categoria",text="Categoria")
 
 #Por defecto se carga usuarios
 Cargar_Usuario()
