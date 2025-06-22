@@ -23,7 +23,7 @@ class L_Lugar:
         try:
             con = Conexion().ConexionBD()
             cursor = con.cursor()
-            sql = "SELECT * FROM lugares LIMIT %s OFFSET %s;"
+            sql = "SELECT * FROM lugares ORDER BY id_lugar LIMIT %s OFFSET %s;"
             cursor.execute(sql, (limit, offset))
             resultado = cursor.fetchall()
             cursor.close()

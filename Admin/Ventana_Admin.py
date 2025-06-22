@@ -5,7 +5,11 @@ from Time_List_Ad_NavyDB import *
 from Distric_list_Ad_NavyDB import *
 from Lugar_list_Ad_NavyDB import *
 from Conexion_MySQL import *
+import subprocess
+import sys
+import os 
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
 def Limpiar_PSW():
     global password_text
@@ -69,7 +73,7 @@ def Filtro_TB(value=None):
 
     if filtro=="Usuarios":
         columns=("Id","Nombre","Password","Categoria")
-        height=5
+        height=7
 
     elif filtro=="Tiempo":
         columns=("Id","Nombre")
@@ -122,7 +126,47 @@ def Filtro_TB(value=None):
         tree.insert("","end",values=fila)                                   
     
 
+def Redigir_Crear():
+    global table_cmb
+    filtro=table_cmb.get()
+    base_dir = os.path.dirname(os.path.abspath(__file__))
 
+    if filtro=="Usuarios":
+        ruta=os.path.join(base_dir,"Metodos","Usuario","Create_User_Ad.py")
+        ventana_admin.destroy()
+        subprocess.Popen(["python",ruta])
+
+
+    elif filtro=="Categoria":
+        ruta=os.path.join(base_dir,"Metodos","Categoria","Create_Categoria_Ad.py")
+        ventana_admin.destroy()
+        subprocess.Popen(["python",ruta])
+
+    elif filtro=="Distritos":
+        ruta=os.path.join(base_dir,"Metodos","Distrito","Create_Distric_Ad.py")
+        ventana_admin.destroy()
+        subprocess.Popen(["python",ruta])
+
+    else:
+        print("No hay tabla seleccionada")
+
+def Eliminar_Selec():
+    sel=tree.selection()
+    if not sel:
+        print("No hay fila seleccionada")
+        return
+    item=tree.item(sel)
+    id_sel= item['values'][0]
+    filtro=table_cmb.get()
+
+    if filtro=="Usuarios":
+        L_Usuario().Eliminar_Usuario(id_sel)
+    elif filtro=="Categoria":
+        L_Categoria().Eliminar_Categoria(id_sel)
+    elif filtro=="Distritos":
+        L_Distrito().Eliminar_Distric(id_sel)
+    else:
+        print("No se puede eliminar")          
 
 
 #Interfaz gráfica
@@ -147,7 +191,7 @@ logo.place(x=670,y=15)
 
 img_edit=Image.open("Images/crear.png")
 edit_ctk=ctk.CTkImage(dark_image=img_edit,size=(25,25))
-edit=ctk.CTkButton(ventana_admin,text="Crear",image=edit_ctk,fg_color="#242424",font=("Ubuntu",19))
+edit=ctk.CTkButton(ventana_admin,text="Crear",image=edit_ctk,fg_color="#242424",font=("Ubuntu",19),command=Redigir_Crear)
 edit.place(x=30,y=105)
 
 
@@ -158,7 +202,7 @@ edit.place(x=170,y=105)
 
 img_edit=Image.open("Images/tash.png")
 edit_ctk=ctk.CTkImage(dark_image=img_edit,size=(25,25))
-edit=ctk.CTkButton(ventana_admin,text="Eliminar",image=edit_ctk,fg_color="#242424",font=("Ubuntu",19))
+edit=ctk.CTkButton(ventana_admin,text="Eliminar",image=edit_ctk,fg_color="#242424",font=("Ubuntu",19),command=Eliminar_Selec)
 edit.place(x=300,y=105)
 
 

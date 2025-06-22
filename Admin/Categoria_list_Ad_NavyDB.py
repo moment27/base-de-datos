@@ -23,7 +23,7 @@ class L_Categoria:
         try:
             con = Conexion().ConexionBD()
             cursor = con.cursor()
-            sql = "SELECT * FROM categoria LIMIT %s OFFSET %s;"
+            sql = "SELECT * FROM categoria ORDER BY id_categoria LIMIT %s OFFSET %s;"
             cursor.execute(sql, (limit, offset))
             resultado = cursor.fetchall()
             cursor.close()
@@ -68,4 +68,13 @@ class L_Categoria:
             return False
         except mysql.connector.IntegrityError as error:
             print(f"Error de integridad al crear categoria: {error}")
-            return False            
+            return False
+
+
+    def Eliminar_Categoria(self,id_categoria):
+        conn=Conexion().ConexionBD()
+        cursor=conn.cursor()
+        sql="DELETE FROM categoria WHERE id_categoria=%s;"
+        cursor.execute(sql, (id_categoria,))
+        conn.commit()
+        conn.close()                

@@ -1,6 +1,6 @@
 #Metodos y temas empleados en clases
 import subprocess
-
+from Admin.User_List_Ad_NavyDB import *
 def Limpiar_PSW():
     global password_text
     password_text.delete(0,"end")
@@ -35,16 +35,21 @@ class FormularioIniSesion:
                 print("Campos Vacíos") 
                 return 
             
-            resultado=LoginUsuario().IngresarUsuario(user,paswd)
+            categoria=L_Usuario().Obtener_Cat_Usuario(user,paswd)
             
-            if resultado:
+            if categoria:
 
                 Limpiar_PSW()
                 Limpiar_USER()
 
 
-                ventana_login.destroy()
-                subprocess.Popen(["python","Principal.py"])
+                
+                if categoria.lower()=="admin":
+                    ventana_login.destroy()
+                    subprocess.Popen(["python","Admin/Ventana_Admin.py"])
+                else:
+                    ventana_login.destroy()    
+                    subprocess.Popen(["python","Principal.py"])
                 
             else:
                 print("Credenciales incorrectas")

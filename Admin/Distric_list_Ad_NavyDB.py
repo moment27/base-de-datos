@@ -23,7 +23,7 @@ class L_Distrito:
         try:
             con = Conexion().ConexionBD()
             cursor = con.cursor()
-            sql = "SELECT * FROM distrito LIMIT %s OFFSET %s;"
+            sql = "SELECT * FROM distrito ORDER BY id_distrito LIMIT %s OFFSET %s;"
             cursor.execute(sql, (limit, offset))
             resultado = cursor.fetchall()
             cursor.close()
@@ -68,4 +68,12 @@ class L_Distrito:
             return False
         except mysql.connector.IntegrityError as error:
             print(f"Error de integridad al crear distrito: {error}")
-            return False        
+            return False
+
+    def Eliminar_Distrito(self,id_distrito):
+        conn=Conexion().ConexionBD()
+        cursor=conn.cursor()
+        sql="DELETE FROM distrito WHERE id_distrito=%s;"
+        cursor.execute(sql, (id_distrito,))
+        conn.commit()
+        conn.close()            

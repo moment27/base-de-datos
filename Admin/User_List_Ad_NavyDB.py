@@ -53,3 +53,29 @@ class L_Usuario:
             print(f"Error de integridad al crear el usuario: {error}")
             return False 
 
+    def Eliminar_Usuario(self,id_usuario):
+        conn=Conexion().ConexionBD()
+        cursor=conn.cursor()
+        sql="DELETE FROM usuario WHERE id_user=%s;"
+        cursor.execute(sql, (id_usuario,))
+        conn.commit()
+        conn.close()
+
+    def Obtener_Cat_Usuario(self,nombre,usuario):
+        try:
+            con = Conexion().ConexionBD()
+            cursor = con.cursor()
+            sql = "SELECT categoria FROM usuario WHERE nombre=%s AND password=%s;"
+            cursor.execute(sql, (nombre,usuario))
+            resultado = cursor.fetchone()
+            cursor.close()
+            con.close()
+
+            if resultado:
+                return resultado[0]
+            else:
+                return None
+        
+        except mysql.connector.Error as error:
+            print(f"Error al verificar categoria/usuario {error}")
+            return None    
