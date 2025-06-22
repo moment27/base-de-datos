@@ -150,6 +150,26 @@ def Redigir_Crear():
     else:
         print("No hay tabla seleccionada")
 
+
+def Redirigir_Editar():
+    global table_cmb
+    filtro=table_cmb.get()
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    if filtro=="Usuarios":
+        ruta=os.path.join(base_dir,"Metodos","Usuario","Edit_User_Ad.py")
+        ventana_admin.destroy()
+        subprocess.Popen(["python",ruta])
+    elif filtro=="Categoria":
+        ruta=os.path.join(base_dir,"Metodos","Categoria","Edit_Categoria_Ad.py")
+        ventana_admin.destroy()
+        subprocess.Popen(["python",ruta])
+    elif filtro=="Distritos":
+        ruta=os.path.join(base_dir,"Metodos","Distrito","Edit_Distric_Ad.py")
+        ventana_admin.destroy()
+        subprocess.Popen(["python",ruta])        
+
+
+
 def Eliminar_Selec():
     sel=tree.selection()
     if not sel:
@@ -197,7 +217,7 @@ edit.place(x=30,y=105)
 
 img_edit=Image.open("Images/edit.png")
 edit_ctk=ctk.CTkImage(dark_image=img_edit,size=(25,25))
-edit=ctk.CTkButton(ventana_admin,text="Editar",image=edit_ctk,fg_color="#242424",font=("Ubuntu",19))
+edit=ctk.CTkButton(ventana_admin,text="Editar",image=edit_ctk,fg_color="#242424",font=("Ubuntu",19),command=Redirigir_Editar)
 edit.place(x=170,y=105)
 
 img_edit=Image.open("Images/tash.png")

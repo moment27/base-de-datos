@@ -18,7 +18,7 @@ def abrir_nueva_cuenta():
 
 
 
-#Clase para Validad los datos
+#Clase para Validad los datos y disitingue si es admin o no
 class FormularioIniSesion:
     
     def guarda_iniciado(self):

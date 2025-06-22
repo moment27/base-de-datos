@@ -41,19 +41,19 @@ from PIL import Image
 #Propiedades de la ventana
 ventana_crUser=ctk.CTk()
 ventana_crUser.geometry("620x620+740+90")
-ventana_crUser.title("Login")
+ventana_crUser.title("Crear Usuario")
 ventana_crUser.iconbitmap("Images/ico (1).ico")
 ventana_crUser.resizable(False,False)
 
 
-titulo=ctk.CTkLabel(ventana_crUser,text="Login",font=("Ubuntu",70))
-titulo.pack()
+titulo=ctk.CTkLabel(ventana_crUser,text="Crear Usuario",font=("Ubuntu",60))
+titulo.place(x=94)
 
 
 img_logo=Image.open("Images/Login.png")
 logo_ctk=ctk.CTkImage(dark_image=img_logo,size=(60,60))
 logo=ctk.CTkLabel(ventana_crUser,image=logo_ctk,text="")
-logo.place(x=400,y=15)
+logo.place(x=470,y=13)
 
 
 

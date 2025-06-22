@@ -78,4 +78,23 @@ class L_Usuario:
         
         except mysql.connector.Error as error:
             print(f"Error al verificar categoria/usuario {error}")
-            return None    
+            return None     
+
+    def Editar_Usuario(self, id_usuario, nuevo_usuario, nueva_password, nueva_categoria):
+        try:
+            con = Conexion().ConexionBD()
+            cursor = con.cursor()
+            sql = "UPDATE usuario SET nombre=%s, password=%s, categoria=%s WHERE id_user=%s;"
+            cursor.execute(sql, (nuevo_usuario, nueva_password, nueva_categoria, id_usuario))
+            con.commit()
+            cursor.close()
+            con.close()
+
+            return True
+        
+        except mysql.connector.Error as error:
+            print(f"Error al editar el usuario {error}")
+            return False
+        except mysql.connector.IntegrityError as error:
+            print(f"Error de integridad al editar el usuario: {error}")
+            return False
