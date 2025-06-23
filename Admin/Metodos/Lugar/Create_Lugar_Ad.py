@@ -8,6 +8,19 @@ def Limpiar_USER():
     global user_text
     user_text.delete(0,"end")
 
+def Limipiar_Categoria():
+    global categoria_text
+    categoria_text.delete(0,"end")
+
+def Limpiar_Distrito():
+    global distrito_text
+    distrito_text.delete(0,"end")
+
+def Volver():
+    ventana_crlugar.destroy()
+    subprocess.Popen(["python", "Admin/Ventana_Admin.py"])
+
+
 
 #Interfaz gráfica
 import customtkinter as ctk
@@ -20,19 +33,19 @@ ventana_crlugar.iconbitmap("Images/ico (1).ico")
 ventana_crlugar.resizable(False,False)
 
 
-titulo=ctk.CTkLabel(ventana_crlugar,text="Login",font=("Ubuntu",70))
-titulo.pack()
+titulo=ctk.CTkLabel(ventana_crlugar,text="Crear Lugar",font=("Ubuntu",67))
+titulo.place(x=93)
 
 
-img_logo=Image.open("Images/Login.png")
+img_logo=Image.open("Images/Distrito.png")
 logo_ctk=ctk.CTkImage(dark_image=img_logo,size=(60,60))
 logo=ctk.CTkLabel(ventana_crlugar,image=logo_ctk,text="")
-logo.place(x=400,y=15)
+logo.place(x=455,y=15)
 
 
 
-user=ctk.CTkLabel(ventana_crlugar,text="Usuario:",font=("Ubuntu",37))
-user.place(x=110,y=130)
+user=ctk.CTkLabel(ventana_crlugar,text="Nombre:",font=("Ubuntu",37))
+user.place(x=100,y=130)
 user_text=ctk.CTkEntry(ventana_crlugar,font=("Ubuntu",23),width=200)
 user_text.place(x=260,y=137)
 
@@ -44,8 +57,8 @@ tash=ctk.CTkButton(ventana_crlugar,image=tash_ctk,text="",width=40,fg_color="#24
 tash.place(x=470,y=135)
 
 
-password=ctk.CTkLabel(ventana_crlugar,text="Contraseña:",font=("Ubuntu",37))
-password.place(x=46,y=214)
+password=ctk.CTkLabel(ventana_crlugar,text="Coordenadas:",font=("Ubuntu",37))
+password.place(x=17,y=214)
 password_text=ctk.CTkEntry(ventana_crlugar,font=("Ubuntu",23),width=200)
 password_text.place(x=259,y=221)
 
@@ -54,14 +67,38 @@ tash1.place(x=470,y=221)
 
 
 
-categoria_user=ctk.CTkLabel(ventana_crlugar,text="Categoria:",font=("Ubuntu",37))
-categoria_user.place(x=75,y=297)
+categoria=ctk.CTkLabel(ventana_crlugar,text="Categoria:",font=("Ubuntu",37))
+categoria.place(x=75,y=297)
+categoria_text=ctk.CTkEntry(ventana_crlugar,font=("Ubuntu",23),width=200)
+categoria_text.place(x=259,y=304)
+
+tash2=ctk.CTkButton(ventana_crlugar,image=tash_ctk,text="",width=40,fg_color="#242424",hover_color="#a5a4a4",command=Limipiar_Categoria)
+tash2.place(x=470,y=304)
 
 
-cat_user=["Normal","Admin"]
-user_cat=ctk.CTkComboBox(ventana_crlugar,values=cat_user,font=("Arial",19),width=200,height=34,state="readonly")
-user_cat.place(x=260,y=310)
-user_cat.set("Categoria Usuario")
+distrito=ctk.CTkLabel(ventana_crlugar,text="Distrito:",font=("Ubuntu",37))
+distrito.place(x=110,y=380)
+distrito_text=ctk.CTkEntry(ventana_crlugar,font=("Ubuntu",23),width=200)
+distrito_text.place(x=259,y=387)
+
+tash3=ctk.CTkButton(ventana_crlugar,image=tash_ctk,text="",width=40,fg_color="#242424",hover_color="#a5a4a4",command=Limpiar_Distrito)
+tash3.place(x=470,y=387)
+
+
+img_back=Image.open("Images/back.png")
+back_ctk=ctk.CTkImage(dark_image=img_back,size=(45,45))
+back=ctk.CTkButton(ventana_crlugar,text="Volver",image=back_ctk,fg_color="#242424",font=("Ubuntu",21),command=Volver)
+back.place(x=130,y=500)
+
+
+img_conf=Image.open("Images/icon_confirma.png")
+conf_ctk=ctk.CTkImage(dark_image=img_conf,size=(45,45))
+conf=ctk.CTkButton(ventana_crlugar,text="Confirmar",image=conf_ctk,fg_color="#242424",font=("Ubuntu",21))
+conf.place(x=320,y=500)
+
+
+
+
 
 
 
