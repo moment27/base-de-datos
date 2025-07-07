@@ -80,7 +80,7 @@ class L_Distrito:
 
     def SeleccionarUnDistrito(self,nombre):
         try:
-            con=Conexion.ConexionBD()
+            con=Conexion().ConexionBD()
             cursor=con.cursor()
             sql="SELECT * from distrito WHERE nombre=%s;"
             cursor.execute(sql,(nombre,))

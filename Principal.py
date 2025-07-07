@@ -38,6 +38,7 @@ import subprocess
 from PIL import Image
 from Mapa_Manager import MapaManager
 from Admin.Distric_list_Ad_NavyDB import L_Distrito
+from Admin.Categoria_list_Ad_NavyDB import L_Categoria
 
 
 def Cerrar_Sesion():
@@ -57,10 +58,27 @@ def Validar_Distrito():
         print("Distrito no encontrado")    
 
 def Buscar():
-    print
+    global dist_text
+    nom_dist=dist_text.get().strip()
+
+    if not nom_dist:
+        print("Está vacío")
+        return
+    distric_model=L_Distrito()
+    distrito=distric_model.SeleccionarUnDistrito(nom_dist)
+
+    if distrito:
+        print("Exitoso")
+    else:
+        print("Distrito no encontrado")    
 
 def Aplicar_Filtros():
     print
+
+
+categoria_model= L_Categoria()
+categ_bd=categoria_model.Lista_Categoria()
+lista_categoria=[fila[1] for fila in categ_bd] if categ_bd else[]
 
 
 #Propiedades de ventana
@@ -135,8 +153,8 @@ ubcn.place(x=148,y=249)
 ubcn_text=ctk.CTkEntry(ventana,font=("Ubuntu",21),state="readonly",width=230)
 ubcn_text.place(x=260,y=249)
 
-filt=["Mall","Restaurante","Parques","Universidades"]
-filtro=ctk.CTkComboBox(ventana,values=filt,font=("Arial",19),width=140,state="readonly")
+
+filtro=ctk.CTkComboBox(ventana,values=lista_categoria,font=("Arial",19),width=140,state="readonly")
 filtro.place(x=332,y=342)
 filtro.set("Filtro")
 
