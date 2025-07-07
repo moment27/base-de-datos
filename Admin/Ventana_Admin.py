@@ -23,6 +23,10 @@ def Cargar_Usuario():
     for lista in l_user:
         tree.insert("","end",values=lista)
 
+def Cerrar_Sesion():
+    ventana_admin.destroy()
+    subprocess.Popen(["python","Login.py"])
+
 def siguiente_pagina(): 
     #global pagina_actual
     #pagina_actual+=1
@@ -200,13 +204,21 @@ ventana_admin.title("Admin🎩")
 ventana_admin.iconbitmap("Images/ico (1).ico")
 ventana_admin.resizable(False,False)
 
-titulo=ctk.CTkLabel(ventana_admin,text="Admin CRUD",font=("Ubuntu",70))
+titulo=ctk.CTkLabel(ventana_admin,text="Admin",font=("Ubuntu",70))
 titulo.pack()
+
+
+img_crses=Image.open("Images/Cerrar_sesion.png")
+crses_ctk=ctk.CTkImage(dark_image=img_crses,size=(40,40))
+crses=ctk.CTkButton(ventana_admin,text="Cerrar Sesión",image=crses_ctk,fg_color="#242424",font=("Ubuntu",19),command=Cerrar_Sesion)
+crses.place(x=10,y=1)
+
+
 
 img_logo=Image.open("Images/Login.png")
 logo_ctk=ctk.CTkImage(dark_image=img_logo,size=(60,60))
 logo=ctk.CTkLabel(ventana_admin,image=logo_ctk,text="")
-logo.place(x=670,y=15)
+logo.place(x=570,y=15)
 
 
 img_edit=Image.open("Images/crear.png")

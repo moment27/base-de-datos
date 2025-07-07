@@ -15,12 +15,53 @@ def limpiar1():
     ubcn_text.delete(0,"end")
     ubcn_text.configure(state="readonly")
 
+def Limpiar_All():
+    limpiar()
+    limpiar1()
+    global prov_cmb
+    global time_cmb
+
+    prov_cmb.set("Selec.Provincia")
+    time_cmb.set("Select.Tiempo")
+    
+
+def mostrar_mapa():
+    global mapa_manager
+    if mapa_manager:
+        mapa_manager.mostrar_mapa_general()
 
 
 #Interfaz gráfica
 import customtkinter as ctk
 import ctypes
+import subprocess
 from PIL import Image
+from Mapa_Manager import MapaManager
+from Admin.Distric_list_Ad_NavyDB import L_Distrito
+
+
+def Cerrar_Sesion():
+    ventana.destroy()
+    subprocess.Popen(["python","Login.py"])
+
+def Validar_Distrito():
+    global dist_text
+    nom_distric=dist_text.get().strip()
+
+    distric_model=L_Distrito()
+    distrito=distric_model.SeleccionarUnDistrito(nom_distric)
+
+    if distrito:
+        print("Distrito encontrado")
+    else:
+        print("Distrito no encontrado")    
+
+def Buscar():
+    print
+
+def Aplicar_Filtros():
+    print
+
 
 #Propiedades de ventana
 ventana=ctk.CTk()
@@ -31,6 +72,13 @@ ventana.iconbitmap("Images/ico (1).ico")
 ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID("NaviGo.GRUPO.EDG")
 
 #Labels y otros elementos de nuestro programa
+
+img_crses=Image.open("Images/Cerrar_sesion.png")
+crses_ctk=ctk.CTkImage(dark_image=img_crses,size=(40,40))
+crses=ctk.CTkButton(ventana,text="Cerrar Sesión",image=crses_ctk,fg_color="#242424",font=("Ubuntu",19),command=Cerrar_Sesion)
+crses.place(x=10,y=1)
+
+
 titulo=ctk.CTkLabel(ventana,text="NavyGo",font=("Ubuntu",45))
 titulo.pack()
 
@@ -40,10 +88,6 @@ logo_ctk=ctk.CTkImage(dark_image=img_logo,size=(45,45))
 ventana.logo=logo_ctk
 logo=ctk.CTkLabel(ventana,image=ventana.logo,text="")
 logo.place(x=389,y=4)
-
-
-
-
 
 
 dist=ctk.CTkLabel(ventana,text="Búsqueda (distrito):",font=("Ubuntu",21))
@@ -73,7 +117,7 @@ prov.place(x=153,y=137)
 priv=["Lima"]
 prov_cmb=ctk.CTkComboBox(ventana,values=priv,font=("Arial",19),width=219,state="readonly")
 prov_cmb.place(x=260,y=137)
-prov_cmb.set("Selecciona provincia")
+prov_cmb.set("Selec.Provincia")
 
 
 
@@ -92,14 +136,19 @@ ubcn_text=ctk.CTkEntry(ventana,font=("Ubuntu",21),state="readonly",width=230)
 ubcn_text.place(x=260,y=249)
 
 filt=["Mall","Restaurante","Parques","Universidades"]
-filtro=ctk.CTkComboBox(ventana,values=filt,font=("Arial",19),width=171,state="readonly")
-filtro.place(x=407,y=360)
+filtro=ctk.CTkComboBox(ventana,values=filt,font=("Arial",19),width=140,state="readonly")
+filtro.place(x=332,y=342)
 filtro.set("Filtro")
 
 
 
-vist_prev=ctk.CTkEntry(ventana,state="readonly",width=525,height=324)
-vist_prev.place(x=52,y=420)
+frame_mapa=ctk.CTkFrame(ventana,width=525,height=324,corner_radius=10)
+frame_mapa.place(x=52,y=420)
+
+mapa_manager=MapaManager(frame_mapa)
+mapa_manager.crear_mapa_widget()
+mapa_manager.mostrar_mapa_general()
+
 
 
 img_btn=Image.open("Images/check.png")
@@ -112,6 +161,24 @@ img_limp1=Image.open("Images/tash.png")
 limp_ctk1=ctk.CTkImage(dark_image=img_limp1,size=(27,27))
 limp1=ctk.CTkButton(ventana,text="",image=limp_ctk1,width=45,fg_color="#242424",hover_color="#a5a4a4",command=limpiar1)
 limp1.place(x=540,y=248)
+
+
+img_acpt=Image.open("Images/icon_confirma.png")
+acpt_ctk=ctk.CTkImage(dark_image=img_acpt,size=(27,27))
+acpt=ctk.CTkButton(ventana,text="Buscar",font=("Ubuntu",16),image=acpt_ctk,fg_color="#242424",hover_color="#a5a4a4",command=Buscar)
+acpt.place(x=20,y=340)
+
+img_apfl=Image.open("Images/Aplicar_filtro.png")
+apfl_ctk=ctk.CTkImage(dark_image=img_apfl,size=(27,27))
+apfl=ctk.CTkButton(ventana,text="Aplicar Filtro",font=("Ubuntu",16),image=apfl_ctk,fg_color="#242424",hover_color="#a5a4a4",command=Aplicar_Filtros)
+apfl.place(x=170,y=340)
+
+
+img_limp_all=Image.open("Images/tash.png")
+limp_all_ctk=ctk.CTkImage(dark_image=img_limp_all,size=(27,27))
+limp_all=ctk.CTkButton(ventana,text="Limpiar",font=("Ubuntu",16),image=limp_all_ctk,fg_color="#242424",hover_color="#a5a4a4",command=Limpiar_All)
+limp_all.place(x=480,y=340)
+
 
 
 ventana.mainloop()

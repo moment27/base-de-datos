@@ -76,4 +76,23 @@ class L_Distrito:
         sql="DELETE FROM distrito WHERE id_distrito=%s;"
         cursor.execute(sql, (id_distrito,))
         conn.commit()
-        conn.close()            
+        conn.close()
+
+    def SeleccionarUnDistrito(self,nombre):
+        try:
+            con=Conexion.ConexionBD()
+            cursor=con.cursor()
+            sql="SELECT * from distrito WHERE nombre=%s;"
+            cursor.execute(sql,(nombre,))
+            resultado=cursor.fetchone()
+            cursor.close()
+            con.close()
+
+            if resultado:
+                return resultado
+            else:
+                print("Distrito no encontrado")
+                return None 
+        except mysql.connector.Error as error:
+            print(f"Error al buscar distrito: {error}")
+            return None                   
