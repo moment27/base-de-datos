@@ -50,3 +50,18 @@ class L_Lugar:
         except mysql.connector.Error as error:
             print(f"Error al contar lugares {error}")
             return 0    
+
+    def Lugares_por_Distrito(self,nombre_distrito):
+        try:
+            con=Conexion().ConexionBD()
+            cursor=con.cursor()
+            sql="SELECT l.* from lugares l join distrito d on l.distrito_id_distrito = d.id_distrito WHERE d.nombre=%s";
+            cursor.execute(sql,(nombre_distrito,))
+            resultado=cursor.fetchall()
+            cursor.close()
+            con.close()
+
+            return resultado
+        except mysql.connector.Error as error:
+            print(f"Error al obtener lugares {error}")      
+            return []

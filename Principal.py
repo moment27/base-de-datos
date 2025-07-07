@@ -39,7 +39,7 @@ from PIL import Image
 from Mapa_Manager import MapaManager
 from Admin.Distric_list_Ad_NavyDB import L_Distrito
 from Admin.Categoria_list_Ad_NavyDB import L_Categoria
-
+from Admin.Lugar_list_Ad_NavyDB import L_Lugar
 
 def Cerrar_Sesion():
     ventana.destroy()
@@ -68,7 +68,26 @@ def Buscar():
     distrito=distric_model.SeleccionarUnDistrito(nom_dist)
 
     if distrito:
-        print("Exitoso")
+        print("Distrito encontrado",distrito[1])
+        lugar_model=L_Lugar()
+        lugares=lugar_model.Lugares_por_Distrito(nom_dist)
+
+        if lugares:
+            print("Lugares encontrados en el distrito")
+            mapa_manager.mostrar_mapa_general()
+
+            for lugar in lugares:
+                nombre_lugar=lugar[1]
+                coordenadas=lugar[2]
+                try:
+                    lat,lon=map(float,coordenadas.split(","))
+                    mapa_manager.agregar_marcador(lat,lon,nombre_lugar)
+                except ValueError:
+                    print(f"Coordenadas inválidas")    
+
+        else:
+            print("No hay")
+
     else:
         print("Distrito no encontrado")    
 

@@ -65,6 +65,11 @@ class MapaManager:
         else:
             self.mostrar_mapa_general()
     
+    def agregar_marcador(self,lat,lon,nombre):
+        if self.mapa_widget:
+            marcador=self.mapa_widget.set_marker(lat,lon,text=nombre)
+            self.marcadores.append(marcador)
+
     def limpiar_mapa(self):
         """Limpia el mapa actual"""
         if self.mapa_widget:

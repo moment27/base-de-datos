@@ -98,3 +98,18 @@ class L_Usuario:
         except mysql.connector.IntegrityError as error:
             print(f"Error de integridad al editar el usuario: {error}")
             return False
+
+    def Actualizar_Contraseña(self,nombre_usuario,new_passwd):
+        try:
+            con=Conexion().ConexionBD()
+            cursor=con.cursor()
+            sql="UPDATE usuario SET password=%s WHERE nombre=%s;"
+            cursor.execute(sql,(new_passwd,nombre_usuario))
+            con.commit()
+            cursor.close()
+            con.close()
+
+            return True
+        except mysql.connector.Error as error:
+            print(f"Error al actualizar {error}")
+            return False

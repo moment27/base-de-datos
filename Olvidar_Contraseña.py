@@ -1,5 +1,5 @@
 import subprocess
-
+from Admin.User_List_Ad_NavyDB import L_Usuario
 
 def Limpiar_USER():
     global ingr_user_text
@@ -17,6 +17,30 @@ def Regresar_Login():
     ventana_olv_psw.destroy()
     subprocess.Popen(["python","Login.py"])
 
+def confirmar_cambio():
+    global ingr_user_text,ingr_new_psw_text,ingr_dnv_new_psw_text
+
+    usuario=ingr_user_text.get().strip()
+    new_pswd=ingr_new_psw_text.get().strip()
+    rpt_pswd=ingr_dnv_new_psw_text.get().strip()
+
+    if usuario=="" or new_pswd=="" or rpt_pswd=="" :
+        print("Campos Vacíos")
+        return
+    if new_pswd!=rpt_pswd:
+        print("Error, las contraseñas no coinciden")
+        return
+
+    gestor=L_Usuario()
+    resultado=gestor.Actualizar_Contraseña(usuario,rpt_pswd)
+
+    if resultado:
+        print("Cambio Exitoso")
+        ventana_olv_psw.destroy()
+        subprocess.Popen(["python","Login.py"])
+    else:
+        print("No se pudo actualizar")
+         
 
 import customtkinter as ctk
 from PIL import Image
@@ -75,7 +99,7 @@ tash1.place(x=497,y=300)
 
 img_confirmar=Image.open("Images/icon_confirma.png")
 confimar_ctk=ctk.CTkImage(dark_image=img_confirmar,size=(40,40))
-confimar=ctk.CTkButton(ventana_olv_psw,text="Confirmar",font=("Ubuntu",19),image=confimar_ctk,fg_color="#242424",hover_color="#a5a4a4")
+confimar=ctk.CTkButton(ventana_olv_psw,text="Confirmar",font=("Ubuntu",19),image=confimar_ctk,fg_color="#242424",hover_color="#a5a4a4",command=confirmar_cambio)
 confimar.place(x=223,y=385)
 
 img_regresar=Image.open("Images/back.png")

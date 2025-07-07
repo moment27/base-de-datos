@@ -1,5 +1,5 @@
 #Metodos para los botones
-
+from Admin.User_List_Ad_NavyDB import L_Usuario
 def Limpiar_PSW():
     global password_text
     password_text.delete(0,"end")
@@ -26,21 +26,29 @@ class FormularioCrearCuenta():
             if user_text is None or password_text is None:
                 print("No hay nada escrito")
                 return 
-            user=user_text.get()
-            paswd=password_text.get()
+            user=user_text.get().strip()
+            paswd=password_text.get().strip()
 
             if user.strip()=="" or paswd.strip()=="":
                 print("Campos vacíos")
                 return 
 
-            Usuarios.ingresarUsuarios(user,paswd)
+            usuario_model=L_Usuario()
+            categoria="normal"
 
-            #Depura los campos
-            Limpiar_PSW()
-            Limpiar_USER()
+            cuenta=usuario_model.Crear_Usuario(user,paswd,categoria)
+            if cuenta:
+                print("Usuario Creado Correctamente")
+                Limpiar_PSW()
+                Limpiar_USER()
+                ventana_new_count.destroy()
+                subprocess.Popen(["python","Login.py"])
+            else:
+                print("Error al crear el usuario")
+        except Exception as error:
+            print(f"Error al ingresar los datos: {error}")
+
         
-        except ValueError as error:
-            print(f"Error al ingresar los datos {error}")
 
 
 
