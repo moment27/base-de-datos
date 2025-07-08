@@ -1,10 +1,17 @@
 #Funciones y otros temas aportados al proyecto
 def devolver():
     global ubcn_text
+    coordenada_act="-12.045913375221852, -76.95443787206254"
     ubcn_text.configure(state="normal")
     ubcn_text.delete(0,"end")
-    ubcn_text.insert(0,"-12.045913375221852, -76.95443787206254")
+    ubcn_text.insert(0,coordenada_act)
     ubcn_text.configure(state="readonly")
+
+    try:
+        lat,lon=map(float,coordenada_act.split(","))
+        mapa_manager.agregar_marcador(lat,lon,"Ubicación Actual")
+    except ValueError:
+        print("Error: Coordenadas inválidas")    
 
 def limpiar():
     global dist_text
@@ -23,6 +30,14 @@ def Limpiar_All():
 
     prov_cmb.set("Selec.Provincia")
     time_cmb.set("Select.Tiempo")
+
+    mapa_manager.limpiar_marcadores()
+    if mapa_manager.ruta_dibujada:
+        mapa_manager.mapa_widget.delete_all_path()
+        mapa_manager.ruta_dibujada=None
+    if hasattr(mapa_manager,"etiqueta_distanciada") and mapa_manager.etiqueta_distancia:
+        mapa_manager.etiqueta_distancia.destroy()
+        mapa_manager.etiqueta_distancia=None    
     
 
 def mostrar_mapa():
@@ -40,6 +55,7 @@ from Mapa_Manager import MapaManager
 from Admin.Distric_list_Ad_NavyDB import L_Distrito
 from Admin.Categoria_list_Ad_NavyDB import L_Categoria
 from Admin.Lugar_list_Ad_NavyDB import L_Lugar
+from math import radians, sin,cos,sqrt,atan2
 
 def Cerrar_Sesion():
     ventana.destroy()
@@ -76,12 +92,19 @@ def Buscar():
             print("Lugares encontrados en el distrito")
             mapa_manager.mostrar_mapa_general()
 
+            try:
+                ubic_actual=ubcn_text.get().strip()
+                lat_actual,lon_actual=map(float,ubic_actual.split(","))
+                mapa_manager.agregar_marcador(lat_actual,lon_actual,"Ubicación Actual")
+            except Exception:
+                print("Ubicación actual inválida")
+
             for lugar in lugares:
                 nombre_lugar=lugar[1]
                 coordenadas=lugar[2]
                 try:
                     lat,lon=map(float,coordenadas.split(","))
-                    mapa_manager.agregar_marcador(lat,lon,nombre_lugar)
+                    mapa_manager.agregar_marcador(lat, lon, nombre_lugar, lambda l=lat, lo=lon, n=nombre_lugar: marcador_clickeado(l, lo, n))
                 except ValueError:
                     print(f"Coordenadas inválidas")    
 
@@ -91,8 +114,40 @@ def Buscar():
     else:
         print("Distrito no encontrado")    
 
-def Aplicar_Filtros():
-    print
+
+def calcular_distancia(lat1,lon1,lat2,lon2):
+    r=6371.0
+    lat1_rad=radians(lat1)
+    lon1_rad=radians(lon1)
+    lat2_rad=radians(lat2)
+    lon2_rad=radians(lon2)
+
+    dlat=lat2_rad - lat1_rad
+    dlon=lon2_rad - lon1_rad
+
+    a=sin(dlat/2)**2+cos(lat1_rad)*cos(lat2_rad)*sin(dlon/2)**2
+    c=2*atan2(sqrt(a),sqrt(1-a))
+
+    distancia=r*c
+    return distancia
+
+def marcador_clickeado(lat,lon,nombre):
+    ubic_actual=ubcn_text.get().strip()
+    try:
+        lat_actual,lon_actual=map(float,ubic_actual.split(","))
+
+        
+
+
+        distancia=calcular_distancia(lat_actual,lon_actual,lat,lon)
+
+        mapa_manager.trazar_ruta((lat_actual,lon_actual),(lat,lon),distancia_Km=distancia)
+
+        print(f"Distancia a {nombre}: {distancia:.2f}km")
+
+    except Exception as e:
+        print(f"Error al calcular distancia o trazar la línea: {e}")    
+
 
 
 categoria_model= L_Categoria()
@@ -207,7 +262,7 @@ acpt.place(x=20,y=340)
 
 img_apfl=Image.open("Images/Aplicar_filtro.png")
 apfl_ctk=ctk.CTkImage(dark_image=img_apfl,size=(27,27))
-apfl=ctk.CTkButton(ventana,text="Aplicar Filtro",font=("Ubuntu",16),image=apfl_ctk,fg_color="#242424",hover_color="#a5a4a4",command=Aplicar_Filtros)
+apfl=ctk.CTkButton(ventana,text="Aplicar Filtro",font=("Ubuntu",16),image=apfl_ctk,fg_color="#242424",hover_color="#a5a4a4")
 apfl.place(x=170,y=340)
 
 

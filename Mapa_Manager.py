@@ -16,6 +16,9 @@ class MapaManager:
         self.mapa_widget = None
         self.marcadores = []
         self.centro_mapa = (-12.046374, -77.042793)  # Lima, Perú
+        self.ruta_dibujada=None
+        self.marcador_distancia=None
+        self.texto_distancia=None
         
     def crear_mapa_widget(self):
         """Crea el widget del mapa en el frame padre"""
@@ -41,7 +44,7 @@ class MapaManager:
         self.marcadores = []
     
     def mostrar_mapa_general(self):
-        """Muestra el mapa general con todos los distritos y lugares"""
+      
         if not self.mapa_widget:
             self.crear_mapa_widget()
         self.limpiar_marcadores()
@@ -59,19 +62,42 @@ class MapaManager:
 
 
     def actualizar_mapa_widget(self, filtro=None, distrito=None, tiempo=None, provincia=None):
-        """Actualiza el widget del mapa con nuevos datos"""
+        
         if not self.mapa_widget:
             self.crear_mapa_widget()
         else:
             self.mostrar_mapa_general()
     
-    def agregar_marcador(self,lat,lon,nombre):
+    def agregar_marcador(self,lat,lon,nombre,callback=None):
         if self.mapa_widget:
             marcador=self.mapa_widget.set_marker(lat,lon,text=nombre)
             self.marcadores.append(marcador)
+            
+            if callback:
+                marcador.command=lambda m=marcador: callback(m.position[0],m.position[1],nombre)
+
+    ruta_dibujada=None
+    def trazar_ruta(self,origen,destino,distancia_Km=None):
+        if self.mapa_widget:
+            if self.ruta_dibujada:
+                self.mapa_widget.delete_all_path(self.ruta_dibujada)
+            self.ruta_dibujada=self.mapa_widget.set_path([origen,destino])  
+
+            #if self.marcador_distancia:
+                #self.marcador_distancia.delete()
+
+            if hasattr(self, "texto_distancia") and self.texto_distancia:
+                self.etiqueta_distancia.destroy()
+                self.etiqueta_distancia=None    
+
+            if distancia_Km is not None:
+                texto=f"{distancia_Km:.2f} km"
+                self.etiqueta_distancia=ctk.CTkLabel(self.parent_frame,text=texto,font=("Arial",11,"bold"),fg_color="black",corner_radius=5)
+                
+                self.etiqueta_distancia.place(relx=0.5,rely=0.42,anchor="center")
 
     def limpiar_mapa(self):
-        """Limpia el mapa actual"""
+     
         if self.mapa_widget:
             self.mapa_widget.destroy()
             self.mapa_widget = None
